@@ -11,7 +11,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"mime/multipart"
 	"net"
 	"net/http"
@@ -432,9 +431,9 @@ func (this *FCGIClient) Request(p map[string]string, req io.Reader) (resp *http.
 	resp.ContentLength, _ = strconv.ParseInt(resp.Header.Get("Content-Length"), 10, 64)
 
 	if chunked(resp.TransferEncoding) {
-		resp.Body = ioutil.NopCloser(httputil.NewChunkedReader(rb))
+		resp.Body = io.NopCloser(httputil.NewChunkedReader(rb))
 	} else {
-		resp.Body = ioutil.NopCloser(rb)
+		resp.Body = io.NopCloser(rb)
 	}
 	return
 }
